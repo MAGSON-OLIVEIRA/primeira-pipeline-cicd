@@ -29,14 +29,10 @@ jobs:
     steps: 
     - name: Obtendo o código
       uses: actions/checkout@v4.1.5
-    - name: Configuração do contexto do Kubernetes (DigitalOcean)
-      run: |
-        echo "${{ secrets.K8S_CONFIG }}" > kubeconfig.yaml
-        export KUBECONFIG=kubeconfig.yaml
-        kubectl config get-contexts
-    - name: Execução do Manifesto
-      uses: digitalocean/action-doctl@v2
+    - name: Deploy no Kubernetes (DigitalOcean)
+      uses: wahyd4/kubectl-apply@v2
       with:
+        kubeconfig: ${{ secrets.K8S_CONFIG }}
         manifests: |
           ./k8s/deployment.yaml
         images: |
